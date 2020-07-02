@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Pharmacy</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/fontello.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+<body>
+	<nav class="nav navbar navbar-light bg-light">
+		<a class="navbar-brand" href="#">
+			<i class="icon-feather"></i>
+			<!-- <img src="../../assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt=""> -->
+			Pharmacy
+		</a>
+	</nav>
+	<center>
+		<div class="center">
+			<div class="row login_page_container">
+				<div class="col-6">
+					<div class="login_form_container">
+						<div class="login_header">
+							<h4>تسجيل الدخول</h4>
+						</div>
+						<div class="login_body">
+							<form action="/logingin" method="POST">
+								<div class="login_field">
+									<p>إسم المستخدم</p>
+									<input type="text" required placeholder="ادخل إسم المستخدم" class="form-control" name="username">
+								</div>
+								<div class="login_field">
+									<p>الرقم السري</p>
+									<input type="password" required placeholder="ادخل الرقم السري" class="form-control" name="password">
+								</div>
+								<div class="login_field">
+									<button class="btn btn-primary" type="submit">تسجيل الدخول</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="col-6 exp_img_container">
+					<div>
+						<img src="/static/images/img.svg">
+					</div>
+				</div>
+			</div>
+		</div>
+	</center>
+
+	
+	<!-- JS files -->
+	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/script.js"></script>
+	<script type="text/javascript">
+		$('.btn_logout').remove()
+	</script>
+</body>
+</html>

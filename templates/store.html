@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Pharmacy</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/fontello.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+<body>
+	<nav class="nav navbar navbar-light bg-light">
+		<div>
+			<a class="navbar-brand" href="#" style="font-family: 'Andalus'; font-size: 25px;">
+				<i class="icon-user-md" style="font-size: 30px;"></i>
+				صيدلية جبل اولياء ( 1 )
+			</a>
+		</div>
+		{% if userType == 'pharmacist' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/newproduct'">إضافة منتج</button>
+			<button onclick="location.href='/makelist'">إجراء معاملة</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+		</div>
+		{% elif userType == 'admin' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/store'">المخزن</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+			<button onclick="location.href='/daily/{{todayDate}}'">الجرد</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+			<button onclick="location.href='/newuser'">إضافة مستخدم</button>
+			<!-- <button onclick="location.href='/'"></button> -->
+
+		</div>
+		{% elif userType == 'accounter' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/deals'">المعاملات</button>
+			<button onclick="location.href='/donedeals'">الفواتير</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+		</div>
+		{% endif %}
+	</nav>
+
+	<center>
+		<div class="row make_list_container">
+			<!-- <div class="col-3">
+				
+			</div> -->
+			<div class="col-12 list-group">
+				<div class="list-group-item all_prodects added_prodect_label">
+					<div>
+						<p>إسم المنتج</p>
+					</div>
+					<div>
+						<p>السعر بالجنية</p>
+					</div>
+					<div>
+						<p>سعر التكلفة</p>
+					</div>
+					<div>
+						<p>عدد الصناديق</p>
+					</div>
+					<div>
+						<p>القطع في الصندوق</p>
+					</div>
+					<div>
+						<p>اكمية الصناديق</p>
+					</div>
+					<div>
+						<p>المصنع</p>
+					</div>
+					<div>
+						<p>االمتبقي</p>
+					</div>
+					<div>
+						<p>تاريخ الصلاحية</p>
+					</div>
+				</div>
+				<div class="list-group all_prodects_container" id="result">
+					{% for product in allProducts %}
+					<div class="list-group-item all_prodects all_prodects2">
+						<div>
+							<p>{{ product.name }}</p>
+						</div>
+						<div>
+							<p>{{ product.price }}</p>
+						</div>
+						<div>
+							<p>{{ product.costPBC * product.oldPack }}</p>
+						</div>
+						<div>
+							<p id="newPack">{{ (product.totPs/product.ppp) }}</p>
+						</div>
+						<div>
+							<p>{{ product.ppp }}</p>
+						</div>
+						<div>
+							<p>{{ product.oldPack }}</p>
+						</div>
+						<div>
+							<p>{{ product.madeIn }}</p>
+						</div>
+						<div>
+							<p>{{ product.totPs }}</p>
+						</div>
+						<div style="border: none;">
+							<p>{{ product.expd }}</p>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		<!-- POPUP WINDOW OF EDITING -->
+		<div class="popup" id="popup-1">
+			<div class="overlay"></div>
+			<div class="content">
+				<div class="popup_header">
+					<div>
+						<button onclick="togglePopup()" class="icon-cancel"></button>
+					</div>
+					<div>
+						<h4>إضافة للمخزون</h4>
+					</div>
+				</div>
+				<div>
+					<div class="add_more_form_comtainer">
+						<div>
+							<p>عدد اللسموشنو الجديد</p>
+						</div>
+						<div>
+							<input type="number" class="form-control" name="">
+						</div>
+						<div>
+							<button class="btn btn-primary icon-plus-circled"> إضافة</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- POPUP WINDOW OF SEARCHING -->
+		<!-- <div class="popup" id="popup-1">
+			<div class="overlay"></div>
+			<div class="content active" style="width: 90%; top: 320px; height: 550px;">
+				<div class="popup_header">
+					<div style="text-align: right;">
+						<button onclick="togglePopupSearch()" class="icon-cancel"></button>
+					</div>
+					<div>
+						<h4>إضافة للمخزون</h4>
+					</div>
+				</div>
+				<div>
+					<div>
+						<div style="width: 95%;">
+							<input type="text" class="form-control" id="search" name="search" placeholder="إسم المنتج">
+							<div class="list_result" style="height: 420px;">
+								<div class="list-group" id="result-2">
+									<div class="list-group-item all_prodects">
+										<div>
+											<p>panadol</p>
+										</div>
+										<div>
+											<p>10 SDG</p>
+										</div>
+										<div>
+											<p>25</p>
+										</div>
+										<div>
+											<p>4</p>
+										</div>
+										<div>
+											<p>UAE</p>
+										</div>
+										<div>
+											<p>103</p>
+										</div>
+										<div>
+											<button class="btn btn-primary"><i class="icon-pencil-2"></i>تعديل</button>
+										</div>
+										<div>
+											<button class="btn btn-success"  onclick="togglePopupSearch()"><i class="icon-plus-circled"></i>إضافة</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+	</center>
+	<div class="nav_search_container" style="display: none;">
+		<button class="btn btn-primary"><i class=" icon-search-1"></i>بحث مخصص</button>
+	</div>
+	
+	<!-- JS files -->
+	<!-- <script type="text/javascript" src="/static/js/bootstrap.js"></script> -->
+	<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/script.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#search').keyup(function(){
+				$('#result').html('');
+				var searchField = $('#search').val();
+				var expression = new RegExp(searchField, 'i');
+				$.getJSON('/editingproduct', function(data){
+					console.log(data);
+					$.each(data.data, function(key, value) {
+						if (value.name.search(expression) != -1 || value.madeIn.search(expression) != -1) {
+							$('#result-2').append('<div class="list-group-item search_product_add"><div><p>' + value.name + '</p></div><div><p>' + value.madeIn + '</p></div><div><p>SDG ' + value.price + '</p></div><div><button  onclick="addToList('+ value.id +')" class="btn btn-success"><i class="icon-plus-circled"></i>اضف للقائمة</button></div>')
+						}
+					})
+				});
+			});
+		});
+		let npn = document.querySelectorAll('#newPack');
+		for(let i = 0; i < npn.length; i++){
+			npn[i].textContent = Number(String(npn[i].textContent).slice(0, 7)).toFixed(1)//Number(npn[0].textContent).round(1);
+		}
+	</script>
+</body>
+</html>

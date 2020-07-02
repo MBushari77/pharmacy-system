@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Pharmacy</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/fontello.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+<body>
+	<nav class="nav navbar navbar-light bg-light">
+		<div>
+			<a class="navbar-brand" href="#" style="font-family: 'Andalus'; font-size: 25px;">
+				<i class="icon-user-md" style="font-size: 30px;"></i>
+				صيدلية جبل اولياء ( 1 )
+			</a>
+		</div>
+		{% if userType == 'pharmacist' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/newproduct'">إضافة منتج</button>
+			<button onclick="location.href='/makelist'">إجراء معاملة</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+		</div>
+		{% elif userType == 'admin' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/store'">المخزن</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+			<button onclick="location.href='/daily/{{todayDate}}'">الجرد</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+			<button onclick="location.href='/newuser'">إضافة مستخدم</button>
+			<!-- <button onclick="location.href='/'"></button> -->
+
+		</div>
+		{% elif userType == 'accounter' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/deals'">المعاملات</button>
+			<button onclick="location.href='/donedeals'">الفواتير</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+		</div>
+		{% endif %}
+	</nav>
+	<center>
+		<div class="row">
+			<div class="col-8">
+				<div class="daily_deals_container">
+					{% if listOfElemn %}
+					<div>
+						<div class="row">
+							<div class="col-2">
+								<p>الإسم</p>
+							</div>
+							<div class="col-2">
+								<p>المشترى بالقطعة</p>
+							</div>
+							<div class="col-2">
+								<p>السعر التجاري</p>
+							</div>
+							<div class="col-2">
+								<p>السعر بالتكلفة</p>
+							</div>
+							<div class="col-2">
+								<p>صافي الربح</p>
+							</div>
+							<div>
+								<p>المتبقي بالتكلفة</p>
+							</div>
+						</div>
+						{% for elem in listOfElemn %}
+						<div class="row">
+							<div class="col-2">
+								<p>{{ elem.name }}</p>
+							</div>
+							<div class="col-2">
+								<p id="picesNum"> {{ elem.pices }}</p>
+							</div>
+							<div class="col-2">
+								<p id="totalOfSelingPrices">{{ elem.price * elem.pices }}</p>
+							</div>
+							<div class="col-2">
+								<p class="round">{{ ( elem.pices / elem.ppp ) * elem.costPBC }}</p>
+							</div>
+							<div class="col-2">
+								<p><i class="round" id="gross">{{ ( elem.pices * elem.price ) - ( ( elem.pices / elem.ppp ) * elem.costPBC )}}</i></p>
+							</div>
+							<div>
+								<p class="round">{{ ( elem.totPs / elem.ppp ) * elem.costPBC }}</p>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+					{% else %}
+					<h3>لا توجد معملات اليوم</h3>
+					{% endif %}
+				</div>
+			</div>
+			<div class="col-4">
+				<div class="cuts_container">
+					{% if cuts %}
+						{% for cut in cuts %}
+						<div class="cut_card">
+							<div class="cut_header">
+								<h4>القيمة المنصرفة : <i id="cutsTotal">{{ cut.mount }}</i></h4>
+							</div>
+							<div>
+								{{ cut.about }}
+							</div>
+						</div>
+						{% endfor %}
+					{% else %}
+						<div>
+							<h3>لا توجد منصرفات اليوم</h3>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div class="daily_info">
+			<table>
+				<tr>
+					<td>
+						<h3>دخل اليوم : </h3>
+					</td>
+					<td>
+						<h3 id="income"> 0 </h3>
+					</td>
+					<td>
+						<h1> | </h1>
+					</td>
+					<!--  -->
+					<td>
+						<h3>صافي الربح : </h3>
+					</td>
+					<td>
+						<h3 id="grossing"> 0 </h3>
+					</td>
+					<td>
+						<h1> | </h1>
+					</td>
+					<!--  -->
+					<td>
+						<h3>منصرف اليوم : </h3>
+					</td>
+					<td>
+						<h3 id="outcome"> 0 </h3>
+					</td>
+					<td>
+						<h1> | </h1>
+					</td>
+					<!--  -->
+					<td>
+						<h3>المتبقي : </h3>
+					</td>
+					<td>
+						<h3 id=""> {{ totalOfProductsMount }} </h3>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</center>
+
+	
+	<!-- JS files -->
+	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/script.js"></script>
+	<script type="text/javascript">
+		getDailyTotal()
+	</script>
+</body>
+</html>

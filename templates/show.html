@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Pharmacy</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/fontello.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<style type="text/css">
+		li{
+
+			width: 100%;
+		}
+		.list-group{
+			width: 100%;
+			padding: 0px;
+		}
+	</style>
+</head>
+<body>
+	<center>
+		<br>
+		<button class="btn btn-primary" id="collect">Get JSON</button>
+	</center>
+	<center>
+<!-- 		{% for i in data %}
+			<p>{{ i.id }}</p>
+			<p>{{ i.name }}</p>
+			<p>{{ i.price }}</p>
+			<p>{{ i.madeIn }}</p>
+			<p>___________________</p>
+		{% endfor %} -->
+		<br>
+		<div style="width: 500px;">
+			<input type="text" class="form-control" id="search" name="search">
+			<ul class="list-group" id="result"></ul>
+		</div>
+	</center>
+	
+	<!-- JS files -->
+	<!-- <script type="text/javascript" src="/static/js/bootstrap.js"></script> -->
+	<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/script.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#search').keyup(function(){
+				$('#result').html('');
+				var searchField = $('#search').val();
+				var expression = new RegExp(searchField, 'i');
+				$.getJSON('/show', function(data){
+					console.log(data);
+					$.each(data.data, function(key, value) {
+						if (value.name.search(expression) != -1 || value.madeIn.search(expression) != -1) {
+							$('#result').append('<li class="list-group-item">' + value.name + '<button>+</button></li>')
+						}
+					})
+				});
+			});
+		});
+	</script>
+</body>
+</html>

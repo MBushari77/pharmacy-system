@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Pharmacy</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/fontello.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+<body>
+	<nav class="nav navbar navbar-light bg-light">
+		<div>
+			<a class="navbar-brand" href="#" style="font-family: 'Andalus'; font-size: 25px;">
+				<i class="icon-user-md" style="font-size: 30px;"></i>
+				صيدلية جبل اولياء ( 1 )
+			</a>
+		</div>
+		{% if userType == 'pharmacist' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/newproduct'">إضافة منتج</button>
+			<button onclick="location.href='/makelist'">إجراء معاملة</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+		</div>
+		{% elif userType == 'admin' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/store'">المخزن</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+			<button onclick="location.href='/daily/{{todayDate}}'">الجرد</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+			<button onclick="location.href='/newuser'">إضافة مستخدم</button>
+			<!-- <button onclick="location.href='/'"></button> -->
+
+		</div>
+		{% elif userType == 'accounter' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/deals'">المعاملات</button>
+			<button onclick="location.href='/donedeals'">الفواتير</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+		</div>
+		{% endif %}
+	</nav>
+	<center>
+		<div class="">
+			<div class="add_pro_form_container">
+				<div class="add_pro_form_container_header">
+					<h3>منصرفة</h3>
+				</div>
+				<div class="add_pro_form_container_body">
+					<form action="/savenewcut" method="post">
+						<div class="row">
+							<div class="col-12 field_container">
+								<label>القيمة المنصرفة</label>
+								<input type="number" class="form-control" required placeholder="ادخل القيمة المنصرفة ..." name="mount">
+							</div>
+						</div>
+						<div>
+							<div class="field_container">
+								<label>حول المنصرفة</label>
+								<textarea class="form-control" name="about" placeholder="حول القيمة المنصرفة ..."></textarea>
+							</div>
+						</div>
+						<div>
+							<button type="submit" class="btn btn-primary">حفظ المنصرفة</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</center>
+
+	
+	<!-- JS files -->
+	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/script.js"></script>
+</body>
+</html>

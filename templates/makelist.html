@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Pharmacy</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/fontello.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+<body>
+	<nav class="nav navbar navbar-light bg-light">
+		<div>
+			<a class="navbar-brand" href="#" style="font-family: 'Andalus'; font-size: 25px;">
+				<i class="icon-user-md" style="font-size: 30px;"></i>
+				صيدلية جبل اولياء ( 1 )
+			</a>
+		</div>
+		{% if userType == 'pharmacist' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/newproduct'">إضافة منتج</button>
+			<button onclick="location.href='/makelist'">إجراء معاملة</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+		</div>
+		{% elif userType == 'admin' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/store'">المخزن</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+			<button onclick="location.href='/daily/{{todayDate}}'">الجرد</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+			<button onclick="location.href='/newuser'">إضافة مستخدم</button>
+			<!-- <button onclick="location.href='/'"></button> -->
+
+		</div>
+		{% elif userType == 'accounter' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/deals'">المعاملات</button>
+			<button onclick="location.href='/donedeals'">الفواتير</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+		</div>
+		{% endif %}
+	</nav>
+	<center>
+		<div class="row make_list_container">
+			<div class="col-6">
+				<div style="width: 95%;">
+					<input type="text" class="form-control" id="search" name="search" placeholder="إسم المنتج">
+					<div class="list_result">
+						<div class="list-group" id="result">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-6 list-group">
+				<div class="list-group-item added_prodect added_prodect_label">
+					<div>
+						<p>إسم المنتج</p>
+					</div>
+					<div>
+						<p>السعر بالجنية</p>
+					</div>
+					<div>
+						<p>عدد القطع</p>
+					</div>
+					<div>
+						<p>تخفيض %</p>
+					</div>
+					<div>
+						<p>إزالة من القائمة</p>
+					</div>
+				</div>
+				<div class="list-group ordered_list" id="result2">
+					<!-- <div class="list-group-item added_prodect">
+						<div>
+							<p>panadol</p>
+						</div>
+						<div>
+							<p>10 SDG</p>
+						</div>
+						<div>
+							<input type="number" class="form-control" value="1" name="">
+						</div>
+						<div>
+							<input type="number" class="form-control" value="0" name="">
+						</div>
+						<div>
+							<button class="btn btn-danger"><i class="icon-cancel-1"></i>حزف</button>
+						</div>
+					</div> -->
+				</div>
+				<div class="row">
+					<!-- <div class="col-4 total_price_container">
+						<h5>الإجمالي :  <i id="total_price">233</i></h5>
+					</div> -->
+					<div class="col-6">
+						<button class="btn btn-success save_ordered_list_btn" onclick="doneIt()"><i class="icon-check"></i>إكمال المعاملة</button>
+					</div>
+					<div class="col-6">
+						<button onclick="location.href='/makelist'" class="btn btn-danger save_ordered_list_btn"><i class="icon-cancel-1"></i>إلغاء المعاملة</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</center>
+	
+	<!-- JS files -->
+	<!-- <script type="text/javascript" src="/static/js/bootstrap.js"></script> -->
+	<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/script.js"></script>
+	<script type="text/javascript">
+		function addToList(x){
+			$('#result2').append('<div class="list-group-item added_prodect" id="'+
+				document.getElementById("id"+x).textContent+'"><div><p id="ns'+
+				document.getElementById("id"+x).textContent+'">'+
+				document.getElementById("name"+x).textContent+'</p></div><div><p id="ps'+
+				document.getElementById("id"+x).textContent+'">'+
+				document.getElementById("price"+x).textContent+'</p></div><div><input  id="pis'+
+				document.getElementById("id"+x).textContent+'" type="number" class="form-control" value="1" name=""></div><div><input  id="dis'+
+				document.getElementById("id"+x).textContent+'" type="number" class="form-control" value="0" max="100" name=""></div><div><button onclick="delFromList(`'+
+				document.getElementById("id"+x).textContent+'`)" class="btn btn-danger"><i class="icon-cancel-1"></i>حزف</button></div></div>')
+		}
+		$(document).ready(function(){
+			$('#search').keyup(function(){
+				$('#result').html('');
+				var searchField = $('#search').val();
+				var expression = new RegExp(searchField, 'i');
+				$.getJSON('/editingproduct', function(data){
+					console.log(data);
+					$.each(data.data, function(key, value) {
+						if (value.name.search(expression) != -1 || value.madeIn.search(expression) != -1) {
+							$('#result').append('<div class="list-group-item to_add"><div><p id="name'+value.id+'">'+value.name+'</p></div><div><p id="madeIn'+value.id+'">'+value.madeIn+'</p></div><div><p id="price'+value.id+'">'+value.price+'</p></div><div><button onclick="addToList('+value.id+')" class="btn btn-success"><i class="icon-plus-circle"></i>إضافة</button></div></div><div><p style="display: none;"id="id'+value.id+'">'+value.id+'</p></div>')
+						}
+					})
+				});
+			});
+		});
+		function doneIt(){
+			let x = $('#result2');
+			let arr = [];
+			let ps; // price text
+			let pis; // pices val
+			let id; // id text
+			let dis; //discount val
+			for(let i = 0; i < x.children().length; i++){
+				ps = document.getElementById("ps"+x.children()[i].id).textContent;
+				pis = document.getElementById("pis"+x.children()[i].id).value;
+				id = Number(x.children()[i].id);
+				dis = document.getElementById("dis"+x.children()[i].id).value;
+				arr.push({'price': Number(ps), 'pices': Number(pis), 'discount': Number(dis), 'id': Number(id)});
+			}
+			let pricesArr = []
+			let totalOfPrices = 0;
+			for(let i = 0; i < arr.length; i++){
+				totalOfPrices += (arr[i]['pices'] * arr[i]['price']) - ((arr[i]['discount']/100) * (arr[i]['pices'] * arr[i]['price']));
+			}
+			// console.log(arr);
+			if (confirm('الإجمالي ' + totalOfPrices)) {
+				// alert(arr)
+				$.ajax({
+					type: 'POST',
+					url: '/getjson',
+					data: JSON.stringify(arr),
+					contentType: "application/json"
+				})
+				.done(function(){
+					location.href="/dealnum";
+				})
+			}
+		}
+
+
+	</script>
+</body>
+</html>
+<!-- <div class="list-group-item to_add"><div><p>name</p></div><div><p>madeIn</p></div><div><p>price</p></div><div><button class="btn btn-success"><i class="icon-plus-circle"></i>إضافة</button></div></div> -->
+
+<!-- <div class="list-group-item added_prodect"><div><p>panadol</p></div><div><p>10 SDG</p></div><div><input type="number" class="form-control" value="1" name=""></div><div><input type="number" class="form-control" value="0" name=""></div><div><button class="btn btn-danger"><i class="icon-cancel-1"></i>حزف</button></div></div> -->
+
+
+<!-- <div class="list-group-item added_prodect" id="selected"><div><p>panadol</p></div><div><p>10 SDG</p></div><div><input type="number" class="form-control" value="1" name=""></div><div><input type="number" class="form-control" value="0" name=""></div><div><button class="btn btn-danger"><i class="icon-cancel-1"></i>حزف</button></div></div> -->

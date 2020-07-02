@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Pharmacy</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/fontello.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+<body>
+	<nav class="nav navbar navbar-light bg-light">
+		<div>
+			<a class="navbar-brand" href="#" style="font-family: 'Andalus'; font-size: 25px;">
+				<i class="icon-user-md" style="font-size: 30px;"></i>
+				صيدلية جبل اولياء ( 1 )
+			</a>
+		</div>
+		{% if userType == 'pharmacist' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/newproduct'">إضافة منتج</button>
+			<button onclick="location.href='/makelist'">إجراء معاملة</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+		</div>
+		{% elif userType == 'admin' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/store'">المخزن</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+			<button onclick="location.href='/daily/{{todayDate}}'">الجرد</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+			<button onclick="location.href='/newuser'">إضافة مستخدم</button>
+			<!-- <button onclick="location.href='/'"></button> -->
+
+		</div>
+		{% elif userType == 'accounter' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/deals'">المعاملات</button>
+			<button onclick="location.href='/donedeals'">الفواتير</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+		</div>
+		{% endif %}
+	</nav>
+	<center>
+		<div class="center">
+			<div class="login_page_container add_user">
+				<div class="">
+					<div class="login_form_container">
+						<div class="login_header">
+							<h4>إضافة مستخدم</h4>
+						</div>
+						<div class="login_body">
+							<form action="/register" method="POST">
+								<div class="login_field">
+									<p>إسم المستخدم</p>
+									<input type="text" required placeholder="ادخل إسم المستخدم" class="form-control" name="username">
+								</div>
+								<div class="login_field">
+									<p>الرقم السري</p>
+									<input type="password" id="password1" required placeholder="ادخل الرقم السري" class="form-control" name="password">
+								</div>
+								<div class="login_field">
+									<p>الرقم السري</p> <p style="color: red;" id="notMatchesMsg"></p>
+									<input type="password" id="password2" required placeholder="ادخل الرقم السري" class="form-control" name="password2">
+								</div>
+								<div class="login_field">
+									<select name="userType" required class="form-control">
+										<option selected disabled hidden>إختيار نوع المستخدم</option>
+										<option value="admin">مدير</option>
+										<option value="pharmacist">صيدلي</option>
+										<option value="accounter">محاسب مالي</option>
+									</select>
+								</div>
+								<div class="login_field">
+									<button id="toSub" class="btn btn-primary" type="button" onclick="confirmPassword()">تسجيل الدخول</button>
+									<button hidden id="regUser" type="submit"></button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</center>
+
+	
+	<!-- JS files -->
+	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/script.js"></script>
+	<script type="text/javascript">
+	</script>
+</body>
+</html>

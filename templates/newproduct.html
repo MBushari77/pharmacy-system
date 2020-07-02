@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Pharmacy</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/fontello.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+<body>
+	<nav class="nav navbar navbar-light bg-light">
+		<div>
+			<a class="navbar-brand" href="#" style="font-family: 'Andalus'; font-size: 25px;">
+				<i class="icon-user-md" style="font-size: 30px;"></i>
+				صيدلية جبل اولياء ( 1 )
+			</a>
+		</div>
+		{% if userType == 'pharmacist' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/newproduct'">إضافة منتج</button>
+			<button onclick="location.href='/makelist'">إجراء معاملة</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+		</div>
+		{% elif userType == 'admin' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/store'">المخزن</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+			<button onclick="location.href='/daily/{{todayDate}}'">الجرد</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+			<button onclick="location.href='/newuser'">إضافة مستخدم</button>
+			<!-- <button onclick="location.href='/'"></button> -->
+
+		</div>
+		{% elif userType == 'accounter' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/deals'">المعاملات</button>
+			<button onclick="location.href='/donedeals'">الفواتير</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+		</div>
+		{% endif %}
+	</nav>
+	<center>
+		<div class="">
+			<div class="add_pro_form_container">
+				<div class="add_pro_form_container_header">
+					<h3>إضافة منتج</h3>
+				</div>
+				<div class="add_pro_form_container_body">
+					<form action="/addproduct" method="post">
+						<div class="row">
+							<div class="col-12 field_container">
+								<label>إسم المنتج</label>
+								<input type="text" class="form-control" required placeholder="ادخل اسم المنتج ..." name="name">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12 field_container">
+								<label>سعر التكلفة للصندوق</label>
+								<input type="number" class="form-control" required placeholder="تكلفة الصندوق" name="costPBC">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6 field_container" style="padding-left: 30px;">
+								<label>إسم الشركة المنتجة</label>
+								<input type="text" class="form-control"  required placeholder="إسم الشركة" name="madeIn">
+							</div>
+							<div class="col-6 field_container">
+								<label>تاريخ الصلاحية</label>
+								<input type="date" class="form-control"  required placeholder="إسم الشركة" name="expd">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6 field_container" style="padding-left: 30px;">
+								<label>عدد الصناديق</label>
+								<input type="number" class="form-control" required placeholder="العدد" name="pNo">
+							</div><div class="col-6 field_container">
+								<label>محتوى الصندوق</label>
+								<input type="number" class="form-control" min="1" required placeholder="الكمية" name="ppp">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6 field_container field_container_number">
+								<label>السعر</label>
+								<input type="number" min="0"  required placeholder="السعر بالجنية" class="form-control" name="price">
+							</div>
+							<div class="col-6 field_container">
+								<label>الصنف - إختياري</label>
+								<input type="text" class="form-control" placeholder="جرام" name="grams">
+							</div>
+						</div>
+						<div>
+							<button type="submit" class="btn btn-primary">حفظ المنتج</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			{% if last %}
+			<div class="list-group-item" style="width: 500px;margin-top: 30px;">
+				<h5>{{ last }} dd</h5>
+			</div>
+				<!-- <div class="last_product">
+					<table>
+						<tbody>
+							<tr>
+								<th style="width: 45%;">الإسم</th>
+								<th style="width: 25%;">السعر</th>
+								<th style="width: 35%;">المصدر</th>
+							</tr>
+							<tr>
+								<td>{{ last[0].name }}</td>
+								<td>{{ last[0].price }}</td>
+								<td>{{ last[0].madeIn }}</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="row last_product_btns">
+						<div class="col-6">
+							<button class="btn btn-success"><i class="icon-pencil-2"></i> تعديل</button>
+						</div>
+						<div class="col-6">
+							<button class="btn btn-danger"><i class="icon-cancel-1"></i> حزف</button>
+						</div>
+					</div>
+				</div> -->
+			{% endif %}
+		</div>
+	</center>
+
+	
+	<!-- JS files -->
+	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/script.js"></script>
+</body>
+</html>

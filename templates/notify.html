@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Pharmacy</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/fontello.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+</head>
+<body>
+	<nav class="nav navbar navbar-light bg-light">
+		<div>
+			<a class="navbar-brand" href="#" style="font-family: 'Andalus'; font-size: 25px;">
+				<i class="icon-user-md" style="font-size: 30px;"></i>
+				صيدلية جبل اولياء ( 1 )
+			</a>
+		</div>
+		{% if userType == 'pharmacist' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/newproduct'">إضافة منتج</button>
+			<button onclick="location.href='/makelist'">إجراء معاملة</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+		</div>
+		{% elif userType == 'admin' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/store'">المخزن</button>
+			<button onclick="location.href='/notify'">الإشعارات</button>
+			<button onclick="location.href='/daily/{{todayDate}}'">الجرد</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+			<button onclick="location.href='/newuser'">إضافة مستخدم</button>
+			<!-- <button onclick="location.href='/'"></button> -->
+
+		</div>
+		{% elif userType == 'accounter' %}
+		<div class="nav_btns_container">
+			<button onclick="location.href='/deals'">المعاملات</button>
+			<button onclick="location.href='/donedeals'">الفواتير</button>
+			<button onclick="location.href='/newcut'">منصرفات</button>
+		</div>
+		{% endif %}
+	</nav>
+	<center>
+		<div class="row notify_container">
+			<div class="col-10 list-group ">
+				<h4>Mostly expired</h4>
+				<div class="" style="margin-left: 10px;">
+					<div class="list-group-item mostly_expired_row2">
+						<div>
+							<p>name</p>
+						</div>
+						<div>
+							<p>left</p>
+						</div>
+						<div>
+							<p>supplier</p>
+						</div>
+						<div>
+							<p>expire</p>
+						</div>
+						<div>
+							<p>remove</p>
+						</div>
+					</div>
+				</div>
+				<div class="mostly_expired_container">
+					{% for pro in pros %}
+					<div class="list-group-item mostly_expired_row">
+						<div>
+							<p>{{ pro.name }}</p>
+						</div>
+						<div>
+							<p>{{ pro.left }}</p>
+						</div>
+						<div>
+							<p>{{ pro.supplier }}</p>
+						</div>
+						<div>
+							<p>{{ pro.expd }}</p>
+						</div>
+						<div style="border: none;">
+							<button onclick="location.href='/deleteproduct/{{ pro.id }}'" class="btn btn-danger"><i class="icon-cancel-1"></i>حزف</button>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="col-5" style="display: none;">
+				<h4>Top three</h4>
+				<div class="" style="margin-left: 10px;">
+					<div class="list-group-item mostly_expired_row2">
+						<div>
+							<p></p>
+						</div>
+						<div>
+							<p></p>
+						</div>
+						<div>
+							<p></p>
+						</div>
+						<div>
+							<p></p>
+						</div>
+						<div>
+							<p></p>
+						</div>
+					</div>
+				</div>
+				<div class="mostly_expired_container">
+					<div class="list-group-item top_three_row top_three_row_up">
+						<div>
+							<p class="icon-up-circled"></p>
+						</div>
+						<div>
+							<p>123</p>
+						</div>
+						<div>
+							<p>name</p>
+						</div>
+					</div>
+					<div class="list-group-item top_three_row top_three_row_up">
+						<div>
+							<p class="icon-up-circled"></p>
+						</div>
+						<div>
+							<p>123</p>
+						</div>
+						<div>
+							<p>name</p>
+						</div>
+					</div>
+					<div class="list-group-item top_three_row top_three_row_up">
+						<div>
+							<p class="icon-up-circled"></p>
+						</div>
+						<div>
+							<p>123</p>
+						</div>
+						<div>
+							<p>name</p>
+						</div>
+					</div>
+					<!-- DOWN -->
+
+					<div class="list-group-item top_three_row top_three_row_down">
+						<div>
+							<p class="icon-down-circled"></p>
+						</div>
+						<div>
+							12
+						</div>
+						<div>
+							<p>name</p>
+						</div>
+					</div>
+					<div class="list-group-item top_three_row top_three_row_down">
+						<div>
+							<p class="icon-down-circled"></p>
+						</div>
+						<div>
+							12
+						</div>
+						<div>
+							<p>name</p>
+						</div>
+					</div>
+					<div class="list-group-item top_three_row top_three_row_down" style="border-radius: 0px 0px 5px 5px">
+						<div>
+							<p class="icon-down-circled"></p>
+						</div>
+						<div>
+							12
+						</div>
+						<div>
+							<p>name</p>
+						</div>
+					</div>
+					<div>
+						<button class="btn btn-warning" onclick="clearCounters()"><i class="icon-feather"></i> تفريغ المحتوى</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</center>
+
+	
+	<!-- JS files -->
+	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/script.js"></script>
+</body>
+</html>
