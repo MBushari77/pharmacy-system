@@ -6,7 +6,6 @@ from functions import *
 import os
 import json
 
-# import runpy
 
 # initializing flask
 app = Flask(__name__)
